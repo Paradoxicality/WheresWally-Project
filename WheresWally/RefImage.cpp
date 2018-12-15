@@ -1,4 +1,5 @@
 #include "BC_RefImage.h"
+#include <algorithm>
 
 RefImage::RefImage() {
 	/*
@@ -22,3 +23,20 @@ RefImage::RefImage() {
 //	for (int i = 0; i < this->height; i++)
 //		matrix[i] = new double[width];
 //}
+
+double RefImage::Compare(LargeImage* largeTemp, int offsetX, int offsetY) {
+	double accuracy = 0.0;
+	
+	for (int y = 0; y < this->getHeight(); y++) {
+		for (int x = 0; x < this->getWidth(); x++) {
+			double largeValue = largeTemp->getValue(x + offsetX, y + offsetY);
+			double refValue = this->getValue(x, y);
+	
+			if (refValue != 255) {
+				accuracy += pow((largeValue - refValue), 2.0);
+			}
+		}
+	}
+	
+	return accuracy;
+}
